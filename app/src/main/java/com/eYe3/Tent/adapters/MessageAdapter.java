@@ -1,6 +1,7 @@
 package com.eYe3.Tent.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.eYe3.Tent.MessageActivity;
 import com.eYe3.Tent.R;
 import com.eYe3.Tent.models.Message;
 import java.util.List;
@@ -53,7 +55,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // ToDo: MessageActivity intent and call
+                    Intent messageActivity = new Intent(mContext, MessageActivity.class);
+                    int position = getAdapterPosition();
+
+                    messageActivity.putExtra("url",mData.get(position).getUrl());
+                    mContext.startActivity(messageActivity);
                 }
             });
         }
