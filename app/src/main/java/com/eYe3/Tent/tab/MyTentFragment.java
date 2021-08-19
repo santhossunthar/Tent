@@ -31,6 +31,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MyTentFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private String mParam1;
+    private String mParam2;
     RecyclerView postRecyclerView;
     DatabaseReference userRef, postRef;
     String currentUserId;
@@ -40,8 +42,6 @@ public class MyTentFragment extends Fragment {
     PostAdapter postAdapter;
     CircleImageView userImage;
     TextView userName, userEmail, userStatus;
-    private String mParam1;
-    private String mParam2;
 
     public MyTentFragment() {
 
@@ -91,6 +91,19 @@ public class MyTentFragment extends Fragment {
         return fragmentView;
     }
 
+    public static boolean isValidContextForGlide(final Context context) {
+        if (context == null) {
+            return false;
+        }
+        if (context instanceof Activity) {
+            final Activity activity = (Activity) context;
+            if (activity.isDestroyed() || activity.isFinishing()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -99,5 +112,51 @@ public class MyTentFragment extends Fragment {
             String email = currentUser.getEmail();
             userEmail.setText(email);
         }
+
+        userRef.child(currentUserId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    String username = dataSnapshot.child("User Name").getValue().toString();
+                    String img = dataSnapshot.child("Profile Image").getValue().toString();
+                    String status = dataSnapshot.child("User Status").getValue().toString();
+
+                    userName.setText(username);
+                    userStatus.setText(status);
+
+                    final Context context = getContext();
+                    if (isValidContextForGlide(context)) {
+                        Glide.with(context).load(img).placeholder(R.drawable.profile_img_icon).into(userImage);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        Query myPostQuery = postRef.orderByChild("userId")
+                .startAt(currentUserId).endAt(currentUserId);
+
+        myPostQuery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                postList = new ArrayList<>();
+                for (DataSnapshot postsnap : dataSnapshot.getChildren()) {
+                    Post post = postsnap.getValue(Post.class);
+                    postList.add(post);
+                }
+
+                postAdapter = new PostAdapter(getActivity(), postList);
+                postRecyclerView.setAdapter(postAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }
