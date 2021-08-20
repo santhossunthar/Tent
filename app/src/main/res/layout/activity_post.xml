@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="3dp"
+        android:background="@drawable/write_post_background"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/post_user_img"
+                android:layout_width="64dp"
+                android:layout_height="44dp"
+                android:layout_gravity="center"
+                android:src="@drawable/profile_img_icon"
+                app:civ_border_color="#ffffff"
+                app:civ_border_width="0dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="5dp">
+
+                <TextView
+                    android:id="@+id/post_user_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Profile Name"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="2dp">
+
+                    <TextView
+                        android:id="@+id/post_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Date"
+                        android:textColor="#000000"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="7dp"
+                        android:layout_marginEnd="7dp"
+                        android:text="at"
+                        android:textSize="12sp"/>
+
+                    <TextView
+                        android:id="@+id/post_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Time"
+                        android:textColor="#000000"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/post_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:autoLink="web"
+            android:linksClickable="true"
+            android:padding="2dp"
+            android:text="Post desc"
+            android:textColor="@color/colortext"
+            android:textColorLink="@android:color/holo_orange_dark"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/post_com_count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:autoLink="web"
+            android:linksClickable="true"
+            android:padding="2dp"
+            android:text="Comments"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/colortext"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+</RelativeLayout>
+
