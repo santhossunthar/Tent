@@ -3,6 +3,8 @@ package com.eYe3.Tent.adapters;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Intent;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -56,7 +58,14 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         holder.profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // todo: Setup comment profile intent activity
+                Intent proact=new Intent(mContext, ComProfileActivity.class);
+                proact.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                proact.putExtra("comKey",mData.get(position).getComKey());
+                proact.putExtra("uid",mData.get(position).getUid());
+                proact.putExtra("userPhoto",mData.get(position).getUserphoto());
+                proact.putExtra("userName",mData.get(position).getUsername());
+                proact.putExtra("userStatus",mData.get(position).getUserstatus());
+                mContext.startActivity(proact);
             }
         });
 
