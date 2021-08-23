@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
+import com.eYe3.Tent.ComProfileActivity;
 import com.eYe3.Tent.models.Comment;
 import com.eYe3.Tent.R;
 import com.google.firebase.database.DataSnapshot;
