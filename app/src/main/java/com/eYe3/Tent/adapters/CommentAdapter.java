@@ -3,7 +3,6 @@ package com.eYe3.Tent.adapters;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -14,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.eYe3.Tent.ComProfileActivity;
+import com.eYe3.Tent.ComReplyActivity;
 import com.eYe3.Tent.models.Comment;
 import com.eYe3.Tent.R;
 import com.google.firebase.database.DataSnapshot;
@@ -48,7 +48,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     @Override
     public void onBindViewHolder(@NonNull final CommentViewHolder holder, final int position) {
-
         Glide.with(mContext).load(mData.get(position).getUserphoto()).into(holder.profileImage);
         holder.userName.setText(mData.get(position).getUsername());
         holder.com_content.setText(mData.get(position).getContent());
@@ -211,7 +210,19 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // todo: Setup comment reply intent activity
+                    Intent comReplyActivity = new Intent(mContext, ComReplyActivity.class);
+                    int position = getAdapterPosition();
+                    comReplyActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                    comReplyActivity.putExtra("content", mData.get(position).getContent());
+                    comReplyActivity.putExtra("comKey", mData.get(position).getComKey());
+                    comReplyActivity.putExtra("userPhoto", mData.get(position).getUserphoto());
+                    comReplyActivity.putExtra("userName", mData.get(position).getUsername());
+                    comReplyActivity.putExtra("postKey", mData.get(position).getPostKey());
+
+                    long timestamp = (long) mData.get(position).getTimestamp();
+                    comReplyActivity.putExtra("postDate", timestamp);
+                    mContext.startActivity(comReplyActivity);
                 }
             });
         }
