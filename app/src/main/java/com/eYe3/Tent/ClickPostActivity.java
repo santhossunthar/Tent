@@ -1,12 +1,16 @@
 package com.eYe3.Tent;
 
+
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.content.Intent;
 import android.os.Bundle;
+
 import android.text.format.DateFormat;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,18 +18,21 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import com.eYe3.Tent.adapters.CommentAdapter;
 import com.eYe3.Tent.models.Comment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -35,15 +42,19 @@ import java.util.List;
 import java.util.Locale;
 
 public class ClickPostActivity extends AppCompatActivity {
+
     ImageView imgUserPost, imgCurrentUser;
     TextView txtPostDesc, txtPostDateName, txtPostTimeName,userName;
     EditText comEditText;
     ImageView comSend;
     String postKey, uid, postDate, postTime,comKey, userStatus, comUserId;
     String currentUserId;
+
     private Toolbar mToolbar;
+
     FirebaseAuth mAuth;
     DatabaseReference userRef,postRef,comRef;
+
     RecyclerView RvComment;
     CommentAdapter commentAdapter;
     List<Comment> listComment;
@@ -86,14 +97,22 @@ public class ClickPostActivity extends AppCompatActivity {
         imgUserPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // todo: Setup profile activity intent
+                Intent profileactivity=new Intent(getApplicationContext(),ProfileActivity.class);
+                profileactivity.putExtra("postKey",postKey);
+                profileactivity.putExtra("userId",uid);
+                profileactivity.putExtra("userStatus",userStatus);
+                startActivity(profileactivity);
             }
         });
 
         userName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // todo: Setup profile activity intent
+                Intent profileactivity=new Intent(getApplicationContext(),ProfileActivity.class);
+                profileactivity.putExtra("postKey",postKey);
+                profileactivity.putExtra("userId",uid);
+                profileactivity.putExtra("userStatus",userStatus);
+                startActivity(profileactivity);
             }
         });
 
@@ -159,9 +178,11 @@ public class ClickPostActivity extends AppCompatActivity {
                             comRef.updateChildren(comMap).addOnCompleteListener(new OnCompleteListener() {
                                 @Override
                                 public void onComplete(@NonNull Task task) {
+
                                     if (task.isSuccessful())
                                     {
                                         showMessage("Comment Added Successfully");
+
                                     }else
                                     {
                                         showMessage("error try again");
