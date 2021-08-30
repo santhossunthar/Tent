@@ -2,6 +2,7 @@ package com.eYe3.Tent;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
@@ -55,6 +56,8 @@ public class StartActivity extends AppCompatActivity {
     }
 
     private void goMain() {
-        // todo: Setup login activity intent
+        Intent i=new Intent(StartActivity.this,LoginActivity.class);
+        startActivity(i);
+        finish();
     }
 }
