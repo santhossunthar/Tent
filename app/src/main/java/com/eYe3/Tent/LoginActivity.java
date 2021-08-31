@@ -28,10 +28,13 @@ public class LoginActivity extends AppCompatActivity {
         logBtn = findViewById(R.id.log_btn);
         mAuth = FirebaseAuth.getInstance();
         forgotPass=findViewById(R.id.forgot_password);
+
         forgotPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // todo: Setup password activity intent
+                Intent forgotPass=new Intent(getApplicationContext(),PasswordActivity.class);
+                startActivity(forgotPass);
+                finish();
             }
         });
 
