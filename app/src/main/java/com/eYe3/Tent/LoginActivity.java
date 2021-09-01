@@ -1,6 +1,5 @@
 package com.eYe3.Tent;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -43,7 +42,18 @@ public class LoginActivity extends AppCompatActivity {
         logBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // todo: Setup login button on click event
+                progressDialog.startProgressDialog();
+
+                final String mail=userMail.getText().toString();
+                final String password=userPassword.getText().toString();
+
+                if (mail.isEmpty() || password.isEmpty()){
+                    showMessage("Verify all fields");
+                    progressDialog.dismissDialog();
+                }else{
+                    signIn(mail,password);
+                    progressDialog.dismissDialog();
+                }
             }
         });
 
