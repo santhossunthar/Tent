@@ -8,4 +8,11 @@
     <string name="profile_name">profile name</string>
     <string name="create_an_account">Create an Account</string>
     <string name="register">Register</string>
+    <string name="User_Full_Name">User Full Name</string>
+    <string name="User_Name">User Name</string>
+
+    <string-array name="Spinner_items">
+        <item>G.C.E O/L</item>
+        <item>G.C.E A/L</item>
+    </string-array>
 </resources>
