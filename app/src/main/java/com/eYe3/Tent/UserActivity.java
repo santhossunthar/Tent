@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -11,22 +12,30 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import java.util.HashMap;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     String spinnerItem;
+    static int galleryPick = 1;
+    CircleImageView img;
     EditText userFullName, userName;
     Button regBtn;
     FirebaseAuth mAuth, mAuthentication;
     DatabaseReference userRef;
+    StorageReference profilePicRef;
     String currentUserId, username, userfullname;
-    String email,password;
+    String email, password;
+    Uri pickedImg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +72,7 @@ public class UserActivity extends AppCompatActivity implements AdapterView.OnIte
                     regBtn.setVisibility(View.VISIBLE);
                 } else {
                     progressDialog.startProgressDialog();
-                    CreateUserAccount(email,password);
+                    CreateUserAccount(email, password);
                 }
             }
         });
@@ -89,7 +98,7 @@ public class UserActivity extends AppCompatActivity implements AdapterView.OnIte
                                 @Override
                                 public void onComplete(@NonNull Task task) {
                                     if (task.isSuccessful()) {
-                                        // todo: Add upload profile picture method
+                                        uploadProfilePic();
                                     } else {
                                         showMessage("Error Occured" + task.getException().getMessage());
                                         regBtn.setVisibility(View.VISIBLE);
@@ -101,6 +110,43 @@ public class UserActivity extends AppCompatActivity implements AdapterView.OnIte
                         }
                     }
                 });
+    }
+
+    private void uploadProfilePic() {
+        profilePicRef = FirebaseStorage.getInstance().getReference().child("Profile Images");
+        final StorageReference imageFilePath = profilePicRef.child(currentUserId + ".jpg");
+        imageFilePath.putFile(pickedImg).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
+                taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
+                        while (!urlTask.isSuccessful()) ;
+                        Uri downloadUrl = urlTask.getResult();
+
+                        final String download_Url = String.valueOf(downloadUrl);
+                        HashMap h = new HashMap();
+                        h.put("Profile Image", download_Url);
+                        userRef.updateChildren(h).addOnCompleteListener(new OnCompleteListener() {
+                            @Override
+                            public void onComplete(@NonNull Task task) {
+                                if (task.isSuccessful()) {
+                                    showMessage("Account created");
+                                    goToMailActivity();
+                                } else {
+                                    showMessage("error");
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+    private void goToMailActivity() {
+        // todo: Setup mail activity intent
     }
 
     private void showMessage(String message) {
