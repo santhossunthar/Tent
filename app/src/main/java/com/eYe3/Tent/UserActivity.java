@@ -1,28 +1,31 @@
 package com.eYe3.Tent;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.storage.StorageReference;
+import com.google.firebase.database.FirebaseDatabase;
 
-import de.hdodenhof.circleimageview.CircleImageView;
+import java.util.HashMap;
 
 public class UserActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     String spinnerItem;
     EditText userFullName, userName;
     Button regBtn;
-    FirebaseAuth mAuthentication;
-    String username, userfullname;
+    FirebaseAuth mAuth, mAuthentication;
+    DatabaseReference userRef;
+    String currentUserId, username, userfullname;
     String email,password;
 
     @Override
@@ -34,12 +37,12 @@ public class UserActivity extends AppCompatActivity implements AdapterView.OnIte
         userName = findViewById(R.id.user_name);
         regBtn = findViewById(R.id.reg_btn);
 
-        email=getIntent().getExtras().getString("email");
-        password=getIntent().getExtras().getString("password");
+        email = getIntent().getExtras().getString("email");
+        password = getIntent().getExtras().getString("password");
 
-        mAuthentication= FirebaseAuth.getInstance();
+        mAuthentication = FirebaseAuth.getInstance();
 
-        final ProgressDialog progressDialog=new ProgressDialog(UserActivity.this);
+        final ProgressDialog progressDialog = new ProgressDialog(UserActivity.this);
 
         regBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,18 +62,49 @@ public class UserActivity extends AppCompatActivity implements AdapterView.OnIte
                     showMessage("Password is empty");
                     regBtn.setVisibility(View.VISIBLE);
                 } else {
-
                     progressDialog.startProgressDialog();
-                    // todo: Add create user account method
-
+                    CreateUserAccount(email,password);
                 }
             }
         });
     }
 
+    private void CreateUserAccount(String email, String password) {
+        mAuthentication.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            mAuth = FirebaseAuth.getInstance();
+                            currentUserId = mAuth.getCurrentUser().getUid();
+                            userRef = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserId);
+                            HashMap userMap = new HashMap();
+                            userMap.put("User Name", username);
+                            userMap.put("User Full Name", userfullname);
+                            userMap.put("gender", "none");
+                            userMap.put("dob", "none");
+                            userMap.put("Profile Image", "none");
+                            userMap.put("User Status", spinnerItem);
+                            userRef.updateChildren(userMap).addOnCompleteListener(new OnCompleteListener() {
+                                @Override
+                                public void onComplete(@NonNull Task task) {
+                                    if (task.isSuccessful()) {
+                                        // todo: Add upload profile picture method
+                                    } else {
+                                        showMessage("Error Occured" + task.getException().getMessage());
+                                        regBtn.setVisibility(View.VISIBLE);
+                                    }
+                                }
+                            });
+                        } else {
+                            showMessage("Account creation failed" + task.getException().getMessage());
+                        }
+                    }
+                });
+    }
+
     private void showMessage(String message) {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-
     }
 
     @Override
@@ -80,7 +114,7 @@ public class UserActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        spinnerItem=parent.getSelectedItem().toString();
+        spinnerItem = parent.getSelectedItem().toString();
     }
 
     @Override
