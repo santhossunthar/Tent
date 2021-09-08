@@ -1,29 +1,22 @@
 package com.eYe3.Tent;
 
 import android.content.Intent;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-
 import android.widget.Toast;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import static com.google.firebase.storage.FirebaseStorage.getInstance;
-
 public class RegisterActivity extends AppCompatActivity {
-
-    FirebaseAuth mAuth;
-    FirebaseUser user;
     private EditText userEmail, userPass;
     private Button reqBtn, logBtn;
     private String email,password;
+    FirebaseAuth mAuth;
+    FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +25,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         userEmail = findViewById(R.id.get_user_email);
         userPass = findViewById(R.id.get_user_passw);
-
         reqBtn = findViewById(R.id.reg_btn);
         logBtn = findViewById(R.id.log_Btn);
 
@@ -102,7 +94,11 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void updateUI() {
-            // todo: Setup user activity intent
+            Intent userActivity = new Intent(getApplicationContext(), UserActivity.class);
+            userActivity.putExtra("email",email);
+            userActivity.putExtra("password",password);
+            startActivity(userActivity);
+            finish();
     }
 }
 
