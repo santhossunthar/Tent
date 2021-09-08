@@ -116,7 +116,9 @@ public class LoginActivity extends AppCompatActivity {
                 updateUI();
             }else
             {
-                // todo: Setup mail activity intent
+                Intent mailActivity = new Intent(getApplicationContext(), MailActivity.class);
+                startActivity(mailActivity);
+                finish();
             }
         }
     }
