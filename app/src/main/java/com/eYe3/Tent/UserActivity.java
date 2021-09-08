@@ -146,7 +146,9 @@ public class UserActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private void goToMailActivity() {
-        // todo: Setup mail activity intent
+        Intent mailActivity = new Intent(getApplicationContext(), MailActivity.class);
+        startActivity(mailActivity);
+        finish();
     }
 
     private void showMessage(String message) {
