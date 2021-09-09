@@ -11,6 +11,7 @@
     <string name="User_Full_Name">User Full Name</string>
     <string name="User_Name">User Name</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="nav_header_desc">Navigation header</string>
 
     <string-array name="Spinner_items">
         <item>G.C.E O/L</item>
