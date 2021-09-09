@@ -10,6 +10,7 @@
     <string name="register">Register</string>
     <string name="User_Full_Name">User Full Name</string>
     <string name="User_Name">User Name</string>
+    <string name="title_activity_main">MainActivity</string>
 
     <string-array name="Spinner_items">
         <item>G.C.E O/L</item>
